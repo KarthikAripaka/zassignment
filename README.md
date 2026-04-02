@@ -10,7 +10,7 @@ Calm, refined, confidence-inspiring. Like a premium banking app crossed with a m
 
 - **Flutter 3.x / Dart 3.x**: Cross-platform excellence with null safety
 - **Riverpod 2.x**: Modern, testable state management (AsyncNotifier + StateNotifier)
-- **Hive**: Fast offline persistence for transactions and goals, no SQL overhead
+- **Hive**: Fast offline persistence for transactions, goals, settings, and audit logs
 - **go_router 12.x**: Type-safe navigation with ShellRoute for bottom nav
 - **fl_chart 0.66+**: Beautiful, customizable charts for spending trends
 - **Google Fonts**: DM Serif Display (headings), DM Sans (body), Roboto Mono (amounts)
@@ -21,23 +21,24 @@ Calm, refined, confidence-inspiring. Like a premium banking app crossed with a m
 
 ```
 lib/
-├── main.dart                    # App entry, Hive init, SharedPreferences
+├── main.dart                    # App entry, Hive init, seed data
 ├── app.dart                     # MaterialApp.router + ProviderScope
 ├── core/
-│   ├── theme/                   # Colors, text styles, ThemeData
+│   ├── theme/                   # Colors, text styles, ThemeData (light/dark)
 │   ├── router/                  # go_router with ShellRoute
 │   ├── utils/                   # Currency formatter, date utils, extensions
 │   ├── widgets/                 # Shared widgets (empty state, shimmer, etc.)
-│   └── providers/               # Settings provider (theme, income, onboarding)
+│   └── providers/               # Settings provider (theme, income, balance)
 ├── features/
-│   ├── onboarding/              # 3-page onboarding with seed data
+│   ├── onboarding/              # 3-page onboarding with name/balance
 │   ├── dashboard/               # Balance card, charts, recent transactions
-│   ├── transactions/            # CRUD, search, filter, grouped list
-│   ├── goals/                   # Savings goals + challenges
-│   └── insights/                # Category breakdown, trends, smart insights
+│   ├── transactions/            # CRUD, search, filter (All/Income/Expenses)
+│   ├── goals/                   # Savings goals with streak tracking
+│   └── insights/                # Category breakdown, trends
 └── data/
     ├── models/                  # Freezed + HiveType models
-    └── adapters/                # Manual Hive adapters
+    ├── adapters/                # Hive adapters for all models
+    └── services/              # Database + seed data services
 ```
 
 ## Features
@@ -46,28 +47,38 @@ lib/
 - Animated balance card with monthly income/expense split
 - 7-day spending bar chart (tappable bars with tooltips)
 - Recent transactions preview
-- Active goals carousel
-- Savings rate and top category chips
+- Active goals progress cards
+- Savings rate display
 
 ### Transactions
 - Grouped by date with sticky headers
-- Swipe to delete with undo snackbar
-- Filter by type (income/expense), date range
+- Filter by type (All/Income/Expenses) and date (This Month)
 - Real-time search
 - Add/edit with category grid, date picker, notes
+- Stays on transaction screen after adding
 
-### Goals & Challenges (Signature Feature)
-- **Savings Goals**: Progress bars, quick add money, color shifts as progress increases
-- **No-Spend Streak**: Flame streak counter, daily check-in tracking
-- **Weekly Budget Challenge**: Fuel gauge visualization
-- Streak badges, motivational messaging
+### Goals & Challenges
+- **Savings Goals**: Progress bars, quick add money, streak tracking
+- **Contribution Streak**: Fire icon with consecutive day count (stored in database)
+- Color shifts as progress increases
+- Add money stays on goals screen
 
 ### Insights
 - Category pie chart with tappable legend
-- Income vs expenses line chart (4-week trend)
-- Smart insight cards generated from actual data
-- Period selector (This Week, This Month, Last Month)
-- Top transactions list
+- Income vs expenses breakdown
+- Smart insight cards from actual data
+
+### Database (Full Local Storage)
+- **Transactions**: Stored in Hive
+- **Goals**: Stored in Hive with contributionStreak & lastContribution
+- **Settings**: Stored in Hive (balance, income, theme, user name)
+- **Audit Logs**: Full tracking of all CRUD operations
+
+### Theme Support
+- Light mode: Pure white background, black text
+- Dark mode: Dark background, white text
+- Theme toggle persisted in database
+- System theme option
 
 ### UX Excellence
 - Custom empty/error/loading states everywhere
@@ -75,70 +86,69 @@ lib/
 - Staggered list animations
 - Count-up number animations on dashboard
 - Light/dark/system theme toggle (persisted)
-- Bottom nav with animated indicator
+- Bottom nav with NavigationBar
+
+## Seed Data
+
+On first launch (and every restart for development), the app seeds:
+- 5 sample transactions (salary, grocery, fuel, rent, movie)
+- 3 sample goals with different streak levels:
+  - Emergency Fund: 8 day streak
+  - New Phone: 9 day streak
+  - Vacation Trip: 0 day streak
 
 ## Screenshots
 
 ### Dashboard
 ```
 [Balance Card]
- Total Balance: ₹45,230
- Income: ₹52,000 | Expenses: ₹6,770
+ Total Balance: ₹15,000
+ Income: ₹5,000 | Expenses: ₹4,600
 
 [7-day Spending Chart]
-
- This Month: 78% saved | Top: Food ₹2.1K
-
  Recent Transactions →
  Active Goals →
 ```
 
 ### Transactions
 ```
-[Search Bar] [Filters: All|Income|Expenses|This Week]
+[Search Bar] [Filters: All|Income|Expenses|This Month]
 
  Today
-   Grocery shopping  Food  -₹450
-   Metro pass  Transport  -₹120
+   Grocery shopping  Food  -₹1,500
+   Fuel  Transport  -₹800
 
  Yesterday
-   Monthly Salary  Income  +₹52,000
+   Salary  Income  +₹5,000
 ```
 
 ### Goals
 ```
- [Savings] New Laptop Fund
-  ████████░░░░ 31% (₹25,000 of ₹80,000)
-  87 days left
+[Emergency Fund] 🔥 8
+ ██████████████░░ 30% (₹15,000 of ₹50,000)
+ 90 days left
 
- [No-Spend] No Shopping Week
-  🔥 3 day streak
-  [Check In Today]
+[New Phone] 🔥 9
+ █████████████████░░░ 32% (₹8,000 of ₹25,000)
+ 60 days left
 ```
 
-### Insights
-```
- Spending by Category [Donut Chart]
- Food: ₹2,100 | Transport: ₹320 | Shopping: ₹1,549
-
- 💡 Your biggest expense is Food (₹2.1K)
- 💡 You're saving 78% of your income this period
- 💡 Friday is your highest spending day
-```
+### Theme
+- Light: White (#FFFFFF) background, Black (#000000) text
+- Dark: Dark (#121318) background, White (#FFFFFF) text
+- Charts and icons retain their colors in both themes
 
 ## Setup & Run
 
 1. `flutter pub get`
 2. `dart run build_runner build --delete-conflicting-outputs`
 3. `flutter analyze` (zero errors)
-4. `flutter run`
-
-First launch shows onboarding, seeds 15 sample transactions + 2 goals.
+4. `flutter run -d chrome` or `flutter run`
 
 ## Assumptions
 
 - Currency: INR (₹)
-- Categories: Pre-defined 11 categories (non-editable)
+- Categories: 12 pre-defined categories (food, transport, shopping, entertainment, health, housing, utilities, education, travel, income, salary, rent, other)
 - Offline-only (no sync/backend)
 - Single user
 - Monthly income used for insights calculations
@@ -155,6 +165,8 @@ First launch shows onboarding, seeds 15 sample transactions + 2 goals.
 8. Share insights as image
 9. Home screen widget
 10. Split transactions
+11. Bill reminders
+12. Investment tracking
 
 ---
 
