@@ -100,19 +100,19 @@ class GoalCard extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (!isCompleted && contributionStreak > 0)
+              if (!isCompleted)
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.local_fire_department,
                       size: 18,
-                      color: Colors.orange,
+                      color: contributionStreak > 0 ? Colors.orange : (isDark ? Colors.white24 : Colors.black26),
                     ),
                     const Gap(2),
                     Text(
                       '$contributionStreak',
                       style: AppTextStyles.bodyMedium.copyWith(
-                        color: Colors.orange,
+                        color: contributionStreak > 0 ? Colors.orange : (isDark ? Colors.white54 : Colors.black54),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
