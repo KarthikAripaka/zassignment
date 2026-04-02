@@ -281,8 +281,8 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
       ),
     );
 
-    // Auto close dialog after 1.5 seconds and go back
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    // Auto close dialog after 2 seconds and go back
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted && context.mounted) {
         Navigator.of(context).pop(); // Close dialog
         Navigator.of(context).pop(); // Go back to goals screen

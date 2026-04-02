@@ -431,8 +431,8 @@ class _AddEditTransactionScreenState
       ),
     );
 
-    // Auto close dialog after 1.5 seconds and clear form
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    // Auto close dialog after 2 seconds and clear form
+    Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
         Navigator.of(context).pop(); // Close dialog
         // Clear form for next entry
