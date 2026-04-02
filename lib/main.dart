@@ -6,12 +6,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'app.dart';
 import 'core/providers/settings_provider.dart';
 import 'data/services/database_service.dart';
+import 'data/services/seed_data_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final db = DatabaseService();
   await db.init();
+
+  // Seed initial data
+  await SeedDataService.seedIfEmpty();
 
   final prefs = await SharedPreferences.getInstance();
 
