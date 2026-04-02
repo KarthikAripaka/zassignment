@@ -7,22 +7,17 @@ class AppTheme {
   AppTheme._();
 
   static final ThemeData light = ThemeData(
-    colorScheme: const ColorScheme(
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: const Color.fromARGB(255, 246, 249, 248),
       brightness: Brightness.light,
-      primary: Colors.black,
-      onPrimary: Colors.white,
-      primaryContainer: Colors.white,
-      onPrimaryContainer: Colors.black,
-      secondary: Colors.orange,
-      onSecondary: Colors.white,
-      secondaryContainer: Colors.white,
-      onSecondaryContainer: Colors.black,
-      tertiary: Colors.blue,
-      onTertiary: Colors.white,
+      primary: const Color.fromARGB(255, 244, 247, 246),
+      secondary: AppColors.accent,
       surface: Colors.white,
+      onPrimary: const Color.fromARGB(255, 242, 246, 244),
+      onSecondary: Colors.black,
       onSurface: Colors.black,
-      error: Color(0xFFE05252),
-      onError: Colors.white,
+      onBackground: Colors.black,
+      error: AppColors.danger,
     ),
     useMaterial3: true,
     scaffoldBackgroundColor: Colors.white,
@@ -55,7 +50,8 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(color: Colors.black54, width: 2),
+        borderSide: const BorderSide(
+            color: Color.fromARGB(255, 226, 232, 230), width: 2),
       ),
       filled: true,
       fillColor: Colors.white,
@@ -81,7 +77,7 @@ class AppTheme {
     textTheme: _textTheme(Brightness.light),
     navigationBarTheme: const NavigationBarThemeData(
       backgroundColor: Colors.white,
-      indicatorColor: Colors.black87,
+      indicatorColor: AppColors.primaryLight,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       surfaceTintColor: Colors.transparent,
     ),
@@ -158,23 +154,27 @@ class AppTheme {
   );
 
   static TextTheme _textTheme(Brightness brightness) {
-    final isDark = brightness == Brightness.dark;
-    final base = Typography.material2021().black.apply(
-      bodyColor: Colors.black,
-      displayColor: Colors.black,
+    final base = (brightness == Brightness.light
+            ? Typography.material2021().black
+            : Typography.material2021().white)
+        .apply(
+      bodyColor:
+          brightness == Brightness.light ? null : AppColors.darkTextPrimary,
+      displayColor:
+          brightness == Brightness.light ? null : AppColors.darkTextPrimary,
     );
 
     return base
         .copyWith(
-          displayLarge: AppTextStyles.displayLarge.copyWith(color: isDark ? Colors.white : Colors.black),
-          displayMedium: AppTextStyles.displayMedium.copyWith(color: isDark ? Colors.white : Colors.black),
-          displaySmall: AppTextStyles.displaySmall.copyWith(color: isDark ? Colors.white : Colors.black),
-          headlineLarge: AppTextStyles.headlineLarge.copyWith(color: isDark ? Colors.white : Colors.black),
-          headlineMedium: AppTextStyles.headlineMedium.copyWith(color: isDark ? Colors.white : Colors.black),
-          headlineSmall: AppTextStyles.headlineSmall.copyWith(color: isDark ? Colors.white : Colors.black),
-          bodyLarge: AppTextStyles.bodyLarge.copyWith(color: isDark ? Colors.white : Colors.black),
-          bodyMedium: AppTextStyles.bodyMedium.copyWith(color: isDark ? Colors.white70 : Colors.black87),
-          bodySmall: AppTextStyles.bodySmall.copyWith(color: isDark ? Colors.white54 : Colors.black54),
+          displayLarge: AppTextStyles.displayLarge,
+          displayMedium: AppTextStyles.displayMedium,
+          displaySmall: AppTextStyles.displaySmall,
+          headlineLarge: AppTextStyles.headlineLarge,
+          headlineMedium: AppTextStyles.headlineMedium,
+          headlineSmall: AppTextStyles.headlineSmall,
+          bodyLarge: AppTextStyles.bodyLarge,
+          bodyMedium: AppTextStyles.bodyMedium,
+          bodySmall: AppTextStyles.bodySmall,
         )
         .apply(fontFamily: 'DMSans');
   }

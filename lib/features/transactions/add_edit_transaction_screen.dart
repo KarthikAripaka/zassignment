@@ -418,15 +418,6 @@ class _AddEditTransactionScreenState
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) {
-        // Auto close dialog after 2 seconds and navigate back
-        Future.delayed(const Duration(seconds: 2), () {
-          if (dialogContext.mounted) {
-            Navigator.of(dialogContext).pop(); // Close dialog
-          }
-          if (mounted) {
-            Navigator.of(context).pop(); // Navigate back to previous screen
-          }
-        });
         return AlertDialog(
           content: Row(
             children: [
@@ -441,6 +432,23 @@ class _AddEditTransactionScreenState
         );
       },
     );
+    
+    // Close dialog and stay on current screen
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        Navigator.of(context).pop();
+        if (!_isEditing) {
+          _amountController.clear();
+          _titleController.clear();
+          _notesController.clear();
+          setState(() {
+            _type = TransactionType.expense;
+            _selectedCategory = Category.food;
+            _selectedDate = DateTime.now();
+          });
+        }
+      }
+    });
   }
 }
 

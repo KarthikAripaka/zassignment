@@ -79,10 +79,12 @@ class GoalsScreen extends ConsumerWidget {
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
                             final goal = activeGoals[index];
+                            final streak = ref.watch(goalContributionStreakProvider(goal.id));
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 12),
                               child: GoalCard(
                                 goal: goal,
+                                contributionStreak: streak,
                                 onAddMoney: () =>
                                     _showAddMoneyDialog(context, ref, goal),
                                 onComplete: () => _completeGoal(ref, goal),

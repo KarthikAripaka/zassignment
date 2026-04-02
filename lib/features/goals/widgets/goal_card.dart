@@ -15,6 +15,7 @@ class GoalCard extends StatelessWidget {
     this.onComplete,
     this.onCheckIn,
     this.isCompleted = false,
+    this.contributionStreak = 0,
   });
 
   final Goal goal;
@@ -22,6 +23,7 @@ class GoalCard extends StatelessWidget {
   final VoidCallback? onComplete;
   final VoidCallback? onCheckIn;
   final bool isCompleted;
+  final int contributionStreak;
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,24 @@ class GoalCard extends StatelessWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
+                ),
+              if (!isCompleted && contributionStreak > 0)
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.local_fire_department,
+                      size: 18,
+                      color: Colors.orange,
+                    ),
+                    const Gap(2),
+                    Text(
+                      '$contributionStreak',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: Colors.orange,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
             ],
           ),

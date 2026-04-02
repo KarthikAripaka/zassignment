@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../../data/models/goal.dart';
+import '../../../data/models/transaction.dart';
 import '../../../data/models/audit_log.dart';
 import '../../../data/adapters/goal_adapter.dart';
 import '../../../core/providers/settings_provider.dart';
 import '../../../data/services/database_service.dart';
+import '../../transactions/providers/transactions_provider.dart';
 
 final goalsBoxProvider = FutureProvider<Box<Goal>>((ref) async {
   if (!Hive.isAdapterRegistered(1)) {
@@ -21,6 +23,11 @@ final goalsProvider = StateNotifierProvider<GoalsNotifier, List<Goal>>((ref) {
   return GoalsNotifier(box.value, settingsNotifier);
 });
 
+final goalContributionStreakProvider = Provider.family<int, String>((ref, goalId) {
+  final notifier = ref.watch(goalsProvider.notifier);
+  return notifier.getContributionStreak(goalId);
+});
+
 class GoalsNotifier extends StateNotifier<List<Goal>> {
   GoalsNotifier(this._box, this._settingsNotifier) : super([]) {
     _load();
@@ -29,6 +36,33 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
   final Box<Goal>? _box;
   final SettingsNotifier _settingsNotifier;
   static const _uuid = Uuid();
+  
+  final Map<String, int> _contributionStreaks = {};
+  final Map<String, DateTime> _lastContributionDates = {};
+
+  int getContributionStreak(String goalId) => _contributionStreaks[goalId] ?? 0;
+  DateTime? getLastContributionDate(String goalId) => _lastContributionDates[goalId];
+
+  void _updateContributionStreak(String goalId) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final lastDate = _lastContributionDates[goalId];
+    
+    if (lastDate != null) {
+      final lastDay = DateTime(lastDate.year, lastDate.month, lastDate.day);
+      final diff = today.difference(lastDay).inDays;
+      
+      if (diff == 1) {
+        _contributionStreaks[goalId] = (_contributionStreaks[goalId] ?? 0) + 1;
+      } else if (diff > 1) {
+        _contributionStreaks[goalId] = 1;
+      }
+    } else {
+      _contributionStreaks[goalId] = 1;
+    }
+    
+    _lastContributionDates[goalId] = now;
+  }
 
   void _load() {
     if (_box == null) return;
@@ -138,6 +172,9 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
 
     final oldAmount = goal.currentAmount;
     await update(updated);
+
+    // Update contribution streak
+    _updateContributionStreak(goalId);
 
     await DatabaseService().logAudit(
       action: AuditAction.update,
