@@ -27,13 +27,15 @@ class ManualGoalAdapter extends TypeAdapter<Goal> {
       lastCheckIn: fields.containsKey(7) ? fields[7] as DateTime? : null,
       isCompleted: fields.containsKey(8) ? fields[8] as bool : false,
       createdAt: fields[9] as DateTime,
+      contributionStreak: fields.containsKey(10) ? fields[10] as int : 0,
+      lastContribution: fields.containsKey(11) ? fields[11] as DateTime? : null,
     );
   }
 
   @override
   void write(BinaryWriter writer, Goal obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,6 +55,10 @@ class ManualGoalAdapter extends TypeAdapter<Goal> {
       ..writeByte(8)
       ..write(obj.isCompleted)
       ..writeByte(9)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(10)
+      ..write(obj.contributionStreak)
+      ..writeByte(11)
+      ..write(obj.lastContribution);
   }
 }
