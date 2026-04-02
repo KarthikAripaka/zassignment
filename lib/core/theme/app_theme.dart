@@ -8,12 +8,12 @@ class AppTheme {
 
   static final ThemeData light = ThemeData(
     colorScheme: ColorScheme.fromSeed(
-      seedColor: const Color.fromARGB(255, 246, 249, 248),
+      seedColor: Colors.grey,
       brightness: Brightness.light,
-      primary: const Color.fromARGB(255, 244, 247, 246),
+      primary: Colors.black87,
       secondary: AppColors.accent,
       surface: Colors.white,
-      onPrimary: AppColors.primaryLight,
+      onPrimary: Colors.white,
       onSecondary: Colors.black,
       onSurface: Colors.black,
       onBackground: Colors.black,
@@ -50,8 +50,7 @@ class AppTheme {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(
-            color: Color.fromARGB(255, 226, 232, 230), width: 2),
+        borderSide: const BorderSide(color: Colors.black54, width: 2),
       ),
       filled: true,
       fillColor: Colors.white,
@@ -77,7 +76,7 @@ class AppTheme {
     textTheme: _textTheme(Brightness.light),
     navigationBarTheme: const NavigationBarThemeData(
       backgroundColor: Colors.white,
-      indicatorColor: AppColors.primaryLight,
+      indicatorColor: Colors.black87,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
       surfaceTintColor: Colors.transparent,
     ),

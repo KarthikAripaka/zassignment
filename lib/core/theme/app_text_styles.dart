@@ -1,7 +1,6 @@
 // ─── lib/core/theme/app_text_styles.dart ───
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
 
 class AppTextStyles {
   // Display / Headings - DM Serif Display
@@ -10,7 +9,7 @@ class AppTextStyles {
     fontSize: 48,
     fontWeight: FontWeight.w400,
     height: 1.1,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle displayMedium = TextStyle(
@@ -18,7 +17,7 @@ class AppTextStyles {
     fontSize: 36,
     fontWeight: FontWeight.w400,
     height: 1.1,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle displaySmall = TextStyle(
@@ -26,7 +25,7 @@ class AppTextStyles {
     fontSize: 28,
     fontWeight: FontWeight.w400,
     height: 1.2,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   // Body / UI - DM Sans
@@ -35,7 +34,7 @@ class AppTextStyles {
     fontSize: 24,
     fontWeight: FontWeight.w700,
     height: 1.2,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle headlineMedium = TextStyle(
@@ -43,7 +42,7 @@ class AppTextStyles {
     fontSize: 20,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle headlineSmall = TextStyle(
@@ -51,7 +50,7 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle bodyLarge = TextStyle(
@@ -59,7 +58,7 @@ class AppTextStyles {
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle bodyMedium = TextStyle(
@@ -67,7 +66,7 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: AppColors.textSecondary,
+    color: Colors.black87,
   );
 
   static const TextStyle bodySmall = TextStyle(
@@ -75,7 +74,7 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.w400,
     height: 1.4,
-    color: AppColors.textSecondary,
+    color: Colors.black54,
   );
 
   // Monospaced amounts - Roboto Mono
@@ -84,7 +83,7 @@ class AppTextStyles {
     fontSize: 32,
     fontWeight: FontWeight.w600,
     height: 1.1,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle amountMedium = TextStyle(
@@ -92,7 +91,7 @@ class AppTextStyles {
     fontSize: 24,
     fontWeight: FontWeight.w600,
     height: 1.2,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   static const TextStyle amountSmall = TextStyle(
@@ -100,7 +99,7 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.w500,
     height: 1.2,
-    color: AppColors.textPrimary,
+    color: Colors.black,
   );
 
   // Helper to apply Google Fonts (used in Theme)
