@@ -4,102 +4,90 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppTextStyles {
   // Display / Headings - DM Serif Display
-  static const TextStyle displayLarge = TextStyle(
+  static final TextStyle displayLarge = TextStyle(
     fontFamily: 'DMSerifDisplay',
     fontSize: 48,
     fontWeight: FontWeight.w400,
     height: 1.1,
-    color: Colors.black,
   );
 
-  static const TextStyle displayMedium = TextStyle(
+  static final TextStyle displayMedium = TextStyle(
     fontFamily: 'DMSerifDisplay',
     fontSize: 36,
     fontWeight: FontWeight.w400,
     height: 1.1,
-    color: Colors.black,
   );
 
-  static const TextStyle displaySmall = TextStyle(
+  static final TextStyle displaySmall = TextStyle(
     fontFamily: 'DMSerifDisplay',
     fontSize: 28,
     fontWeight: FontWeight.w400,
     height: 1.2,
-    color: Colors.black,
   );
 
   // Body / UI - DM Sans
-  static const TextStyle headlineLarge = TextStyle(
+  static final TextStyle headlineLarge = TextStyle(
     fontFamily: 'DMSans',
     fontSize: 24,
     fontWeight: FontWeight.w700,
     height: 1.2,
-    color: Colors.black,
   );
 
-  static const TextStyle headlineMedium = TextStyle(
+  static final TextStyle headlineMedium = TextStyle(
     fontFamily: 'DMSans',
     fontSize: 20,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: Colors.black,
   );
 
-  static const TextStyle headlineSmall = TextStyle(
+  static final TextStyle headlineSmall = TextStyle(
     fontFamily: 'DMSans',
     fontSize: 18,
     fontWeight: FontWeight.w600,
     height: 1.3,
-    color: Colors.black,
   );
 
-  static const TextStyle bodyLarge = TextStyle(
+  static final TextStyle bodyLarge = TextStyle(
     fontFamily: 'DMSans',
     fontSize: 16,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: Colors.black,
   );
 
-  static const TextStyle bodyMedium = TextStyle(
+  static final TextStyle bodyMedium = TextStyle(
     fontFamily: 'DMSans',
     fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
-    color: Colors.black87,
   );
 
-  static const TextStyle bodySmall = TextStyle(
+  static final TextStyle bodySmall = TextStyle(
     fontFamily: 'DMSans',
     fontSize: 12,
     fontWeight: FontWeight.w400,
     height: 1.4,
-    color: Colors.black54,
   );
 
   // Monospaced amounts - Roboto Mono
-  static const TextStyle amountLarge = TextStyle(
+  static final TextStyle amountLarge = TextStyle(
     fontFamily: 'RobotoMono',
     fontSize: 32,
     fontWeight: FontWeight.w600,
     height: 1.1,
-    color: Colors.black,
   );
 
-  static const TextStyle amountMedium = TextStyle(
+  static final TextStyle amountMedium = TextStyle(
     fontFamily: 'RobotoMono',
     fontSize: 24,
     fontWeight: FontWeight.w600,
     height: 1.2,
-    color: Colors.black,
   );
 
-  static const TextStyle amountSmall = TextStyle(
+  static final TextStyle amountSmall = TextStyle(
     fontFamily: 'RobotoMono',
     fontSize: 18,
     fontWeight: FontWeight.w500,
     height: 1.2,
-    color: Colors.black,
   );
 
   // Helper to apply Google Fonts (used in Theme)
