@@ -246,11 +246,12 @@ class DashboardScreen extends ConsumerWidget {
 
   void _showThemeDialog(BuildContext context, WidgetRef ref) {
     final currentMode = ref.read(settingsProvider).themeMode;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => SimpleDialog(
-        title: Text('Theme'),
+        title: Text('Theme', style: TextStyle(color: isDark ? Colors.white : Colors.black)),
         children: [
           _ThemeOption(
             icon: Icons.brightness_auto,
@@ -302,20 +303,21 @@ class _ThemeOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SimpleDialogOption(
       onPressed: onTap,
       child: Row(
         children: [
           Icon(
             icon,
-            color: isSelected ? Theme.of(context).colorScheme.primary : null,
+            color: isSelected ? (isDark ? Colors.white : Colors.black) : (isDark ? Colors.white70 : Colors.black54),
           ),
           const Gap(12),
           Text(
             label,
             style: TextStyle(
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: isSelected ? Theme.of(context).colorScheme.primary : null,
+              color: isSelected ? (isDark ? Colors.white : Colors.black) : (isDark ? Colors.white70 : Colors.black54),
             ),
           ),
           const Spacer(),
