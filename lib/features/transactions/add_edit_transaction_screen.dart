@@ -413,15 +413,16 @@ class _AddEditTransactionScreenState
 
     HapticFeedback.lightImpact();
 
-    // Show success dialog
+// Show success dialog
+    final screenContext = context;
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (dialogContext) {
+      builder: (alertContext) {
         return AlertDialog(
           content: Row(
             children: [
-              const Icon(Icons.check_circle, color: AppColors.success, size: 28),
+              Icon(Icons.check_circle, color: AppColors.success, size: 28),
               const SizedBox(width: 12),
               Text(
                 _isEditing ? 'Transaction updated!' : 'Transaction added!',
@@ -431,22 +432,17 @@ class _AddEditTransactionScreenState
           ),
         );
       },
-    );
-    
-    // Close dialog and stay on current screen
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted) {
-        Navigator.of(context).pop();
-        if (!_isEditing) {
-          _amountController.clear();
-          _titleController.clear();
-          _notesController.clear();
-          setState(() {
-            _type = TransactionType.expense;
-            _selectedCategory = Category.food;
-            _selectedDate = DateTime.now();
-          });
-        }
+    ).then((_) {
+      if (!_isEditing) {
+        Navigator.of(screenContext).pop();
+        _amountController.clear();
+        _titleController.clear();
+        _notesController.clear();
+        setState(() {
+          _type = TransactionType.expense;
+          _selectedCategory = Category.food;
+          _selectedDate = DateTime.now();
+        });
       }
     });
   }
