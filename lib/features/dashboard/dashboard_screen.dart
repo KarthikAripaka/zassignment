@@ -50,7 +50,7 @@ class DashboardScreen extends ConsumerWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Welcome,',
                               style: AppTextStyles.bodyMedium,
                             ),

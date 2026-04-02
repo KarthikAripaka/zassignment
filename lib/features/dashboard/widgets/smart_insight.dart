@@ -25,8 +25,14 @@ class SmartInsight extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isDark
-              ? [AppColors.primary.withOpacity(0.2), AppColors.accent.withOpacity(0.1)]
-              : [AppColors.primary.withOpacity(0.08), AppColors.accent.withOpacity(0.05)],
+              ? [
+                  AppColors.primary.withOpacity(0.2),
+                  AppColors.accent.withOpacity(0.1)
+                ]
+              : [
+                  AppColors.primary.withOpacity(0.08),
+                  AppColors.accent.withOpacity(0.05)
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -83,17 +89,18 @@ class SmartInsight extends StatelessWidget {
       return _Insight(
         icon: Icons.emoji_events,
         title: 'GREAT SAVER',
-        message: 'You\'re saving ${data.savingsRate.toStringAsFixed(0)}% of income this month. Keep it up!',
+        message:
+            'You\'re saving ${data.savingsRate.toStringAsFixed(0)}% of income this month. Keep it up!',
       );
     }
 
     // Insight 2: Low savings warning
     if (data.monthIncome > 0 && data.savingsRate < 10) {
-      final expensePercent = ((data.monthExpenses / data.monthIncome) * 100).clamp(0.0, 999.0);
       return _Insight(
         icon: Icons.warning_amber,
         title: 'SPENDING ALERT',
-        message: 'You\'ve spent ${expensePercent.toStringAsFixed(0)}% of income. Consider cutting back.',
+        message:
+            'You\'ve spent ${data.monthExpenses.toStringAsFixed(0)}% of income. Consider cutting back.',
       );
     }
 
@@ -102,7 +109,8 @@ class SmartInsight extends StatelessWidget {
       return _Insight(
         icon: Icons.insights,
         title: 'TOP SPENDING',
-        message: '${data.topCategoryId![0].toUpperCase()}${data.topCategoryId!.substring(1)} is your biggest expense at ${CurrencyFormatter.compact(data.topCategoryAmount)}.',
+        message:
+            '${data.topCategoryId![0].toUpperCase()}${data.topCategoryId!.substring(1)} is your biggest expense at ${CurrencyFormatter.compact(data.topCategoryAmount)}.',
       );
     }
 
@@ -111,12 +119,13 @@ class SmartInsight extends StatelessWidget {
       return _Insight(
         icon: Icons.flag,
         title: 'GOAL FOCUS',
-        message: 'You have ${data.activeGoals.length} active goal${data.activeGoals.length > 1 ? 's' : ''}. Stay on track!',
+        message:
+            'You have ${data.activeGoals.length} active goal${data.activeGoals.length > 1 ? 's' : ''}. Stay on track!',
       );
     }
 
     // Default: Getting started
-    return _Insight(
+    return const _Insight(
       icon: Icons.tips_and_updates,
       title: 'QUICK TIP',
       message: 'Track every expense to see where your money goes.',

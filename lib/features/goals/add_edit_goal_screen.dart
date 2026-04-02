@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
 import '../../data/models/goal.dart';
@@ -267,26 +268,29 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
     showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle, color: AppColors.success, size: 28),
-            const SizedBox(width: 12),
-            Text(
-              'Goal created!',
-              style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ),
+      builder: (dialogContext) {
+        // Auto close dialog after 2 seconds and go back
+        Future.delayed(const Duration(seconds: 2), () {
+          if (dialogContext.mounted) {
+            Navigator.of(dialogContext).pop(); // Close dialog
+          }
+          if (mounted && context.mounted) {
+            context.pop(); // Go back to goals screen
+          }
+        });
+        return AlertDialog(
+          content: Row(
+            children: [
+              const Icon(Icons.check_circle, color: AppColors.success, size: 28),
+              const SizedBox(width: 12),
+              Text(
+                'Goal created!',
+                style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        );
+      },
     );
-
-    // Auto close dialog after 2 seconds and go back
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted && context.mounted) {
-        Navigator.of(context).pop(); // Close dialog
-        Navigator.of(context).pop(); // Go back to goals screen
-      }
-    });
   }
 }

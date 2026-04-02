@@ -153,10 +153,11 @@ class GoalsScreen extends ConsumerWidget {
 
   void _showAddMoneyDialog(BuildContext context, WidgetRef ref, Goal goal) {
     final controller = TextEditingController();
+    final goalsContext = context;
 
     showDialog<void>(
       context: context,
-      builder: (ctx) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text('Add money to ${goal.title}'),
         content: TextField(
           controller: controller,
@@ -170,25 +171,27 @@ class GoalsScreen extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(ctx),
+            onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () async {
               final amount = double.tryParse(controller.text);
               if (amount != null && amount > 0) {
+                final messenger = ScaffoldMessenger.of(goalsContext);
                 final success = await ref.read(goalsProvider.notifier).addMoney(goal.id, amount);
-                if (success) {
-                  HapticFeedback.mediumImpact();
-                  Navigator.pop(ctx);
-                } else {
-                  Navigator.pop(ctx);
-                  ScaffoldMessenger.of(context).showSnackBar(
+                if (dialogContext.mounted) {
+                  Navigator.of(dialogContext).pop();
+                }
+                if (!success) {
+                  messenger.showSnackBar(
                     const SnackBar(
                       content: Text('Insufficient balance. Please add income first.'),
                       backgroundColor: AppColors.danger,
                     ),
                   );
+                } else {
+                  HapticFeedback.mediumImpact();
                 }
               }
             },
