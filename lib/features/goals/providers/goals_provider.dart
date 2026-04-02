@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../../data/models/goal.dart';
+import '../../../data/models/audit_log.dart';
 import '../../../data/adapters/goal_adapter.dart';
 import '../../../core/providers/settings_provider.dart';
+import '../../../data/services/database_service.dart';
 
 final goalsBoxProvider = FutureProvider<Box<Goal>>((ref) async {
   if (!Hive.isAdapterRegistered(1)) {
@@ -53,6 +55,20 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
     );
     await _box.add(goal);
     _load();
+
+    await DatabaseService().logAudit(
+      action: AuditAction.create,
+      entityType: 'goal',
+      entityId: goal.id,
+      amount: targetAmount,
+      description: 'Goal created: $title',
+      newData: {
+        'title': title,
+        'targetAmount': targetAmount,
+        'type': type.name,
+      },
+    );
+
     return goal;
   }
 
@@ -60,8 +76,25 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
     if (_box == null) return;
     final index = _box.values.toList().indexWhere((g) => g.id == goal.id);
     if (index != -1) {
+      final oldGoal = _box.values.toList()[index];
       await _box.putAt(index, goal);
       _load();
+
+      await DatabaseService().logAudit(
+        action: AuditAction.update,
+        entityType: 'goal',
+        entityId: goal.id,
+        amount: goal.currentAmount,
+        description: 'Goal updated: ${goal.title}',
+        previousData: {
+          'title': oldGoal.title,
+          'currentAmount': oldGoal.currentAmount,
+        },
+        newData: {
+          'title': goal.title,
+          'currentAmount': goal.currentAmount,
+        },
+      );
     }
   }
 
@@ -69,8 +102,20 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
     if (_box == null) return;
     final index = _box.values.toList().indexWhere((g) => g.id == id);
     if (index != -1) {
+      final goal = _box.values.toList()[index];
       await _box.deleteAt(index);
       _load();
+
+      await DatabaseService().logAudit(
+        action: AuditAction.delete,
+        entityType: 'goal',
+        entityId: id,
+        description: 'Goal deleted: ${goal.title}',
+        previousData: {
+          'title': goal.title,
+          'targetAmount': goal.targetAmount,
+        },
+      );
     }
   }
 
@@ -90,7 +135,24 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
       currentAmount: goal.currentAmount + amount,
       isCompleted: goal.currentAmount + amount >= goal.targetAmount,
     );
+
+    final oldAmount = goal.currentAmount;
     await update(updated);
+
+    await DatabaseService().logAudit(
+      action: AuditAction.update,
+      entityType: 'goal',
+      entityId: goalId,
+      amount: amount,
+      description: 'Added money to goal: ${goal.title}',
+      previousData: {
+        'currentAmount': oldAmount,
+      },
+      newData: {
+        'currentAmount': updated.currentAmount,
+      },
+    );
+
     return true;
   }
 

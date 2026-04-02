@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../../data/models/transaction.dart';
+import '../../../data/models/audit_log.dart';
 import '../../../data/adapters/transaction_adapter.dart' as adapter;
 import '../../../core/providers/settings_provider.dart';
+import '../../../data/services/database_service.dart';
 
 final transactionsBoxProvider = FutureProvider<Box<Transaction>>((ref) async {
   if (!Hive.isAdapterRegistered(0)) {
@@ -56,6 +58,20 @@ class TransactionsNotifier extends StateNotifier<List<Transaction>> {
     await _box.add(transaction);
     _load();
 
+    await DatabaseService().logAudit(
+      action: AuditAction.create,
+      entityType: 'transaction',
+      entityId: transaction.id,
+      amount: amount,
+      description: '$type: $title',
+      newData: {
+        'amount': amount,
+        'type': type.name,
+        'categoryId': categoryId,
+        'title': title,
+      },
+    );
+
     if (type == TransactionType.income) {
       await _settingsNotifier.addToBalance(amount);
     } else {
@@ -69,6 +85,24 @@ class TransactionsNotifier extends StateNotifier<List<Transaction>> {
     if (index != -1) {
       await _box.putAt(index, newTransaction);
       _load();
+
+      await DatabaseService().logAudit(
+        action: AuditAction.update,
+        entityType: 'transaction',
+        entityId: newTransaction.id,
+        amount: newTransaction.amount,
+        description: newTransaction.title,
+        previousData: {
+          'amount': oldTransaction.amount,
+          'type': oldTransaction.type.name,
+          'title': oldTransaction.title,
+        },
+        newData: {
+          'amount': newTransaction.amount,
+          'type': newTransaction.type.name,
+          'title': newTransaction.title,
+        },
+      );
 
       if (oldTransaction.type == TransactionType.income) {
         await _settingsNotifier.subtractFromBalance(oldTransaction.amount);
@@ -91,6 +125,19 @@ class TransactionsNotifier extends StateNotifier<List<Transaction>> {
       final transaction = _box.values.toList()[index];
       await _box.deleteAt(index);
       _load();
+
+      await DatabaseService().logAudit(
+        action: AuditAction.delete,
+        entityType: 'transaction',
+        entityId: transaction.id,
+        amount: transaction.amount,
+        description: transaction.title,
+        previousData: {
+          'amount': transaction.amount,
+          'type': transaction.type.name,
+          'title': transaction.title,
+        },
+      );
 
       if (transaction.type == TransactionType.income) {
         await _settingsNotifier.subtractFromBalance(transaction.amount);
