@@ -47,6 +47,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Widget _buildWelcomePage() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -73,17 +74,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               .animate()
               .slideY(begin: 0.3, delay: const Duration(milliseconds: 200)),
           const Gap(16),
-          const Text(
+          Text(
             'Your Personal Finance Companion',
-            style: AppTextStyles.headlineMedium,
+            style: AppTextStyles.headlineMedium.copyWith(
+              color: isDark ? Colors.white : null,
+            ),
             textAlign: TextAlign.center,
           )
               .animate()
               .slideY(begin: 0.3, delay: const Duration(milliseconds: 400)),
           const Gap(48),
-          const Text(
+          Text(
             'Track spending, set goals, gain insights.\nEverything offline, beautifully designed.',
-            style: AppTextStyles.bodyMedium,
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: isDark ? Colors.white70 : null,
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -92,14 +97,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Widget _buildFeaturesPage() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Everything you need',
-            style: AppTextStyles.headlineLarge,
+            style: AppTextStyles.headlineLarge.copyWith(
+              color: isDark ? Colors.white : null,
+            ),
           ),
           const Gap(48),
           _buildFeatureItem(Icons.analytics, 'Smart Insights'),
@@ -113,6 +121,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Widget _buildFeatureItem(IconData icon, String title) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
@@ -128,7 +137,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         Expanded(
           child: Text(
             title,
-            style: AppTextStyles.headlineSmall,
+            style: AppTextStyles.headlineSmall.copyWith(
+              color: isDark ? Colors.white : null,
+            ),
           ),
         ),
       ],
@@ -136,6 +147,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Widget _buildIncomePage() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -143,15 +155,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           const Gap(64),
           Animate(
             effects: const [FadeEffect()],
-            child: const Text(
+            child: Text(
               'Let\'s get started',
-              style: AppTextStyles.headlineLarge,
+              style: AppTextStyles.headlineLarge.copyWith(
+                color: isDark ? Colors.white : null,
+              ),
             ),
           ),
           const Gap(16),
-          const Text(
+          Text(
             'Enter your name and starting balance',
-            style: AppTextStyles.bodyLarge,
+            style: AppTextStyles.bodyLarge.copyWith(
+              color: isDark ? Colors.white70 : null,
+            ),
             textAlign: TextAlign.center,
           ),
           const Gap(32),
@@ -162,17 +178,19 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               color: Theme.of(context).colorScheme.surface,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: Theme.of(context).colorScheme.outline.withOpacity(0.3),
+                color: isDark ? Colors.white24 : Theme.of(context).colorScheme.outline.withOpacity(0.3),
               ),
             ),
             child: TextField(
               controller: _nameController,
-              style: AppTextStyles.bodyLarge,
+              style: AppTextStyles.bodyLarge.copyWith(
+                color: isDark ? Colors.white : null,
+              ),
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Enter your name',
                 hintStyle: AppTextStyles.bodyLarge.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                  color: isDark ? Colors.white54 : Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
                 ),
                 prefixIcon: Icon(
                   Icons.person_outline,
@@ -186,14 +204,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withOpacity10,
+              color: isDark ? Colors.white12 : Theme.of(context).colorScheme.primary.withOpacity(0.1),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(
               children: [
                 Text(
                   '\u20B9',
-                  style: AppTextStyles.displayMedium.copyWith(fontSize: 48),
+                  style: AppTextStyles.displayMedium.copyWith(
+                    fontSize: 48,
+                    color: isDark ? Colors.white : null,
+                  ),
                 ),
                 const Gap(8),
                 SizedBox(
@@ -201,16 +222,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                   child: TextField(
                     controller: _incomeController,
                     keyboardType: TextInputType.number,
-                    style: AppTextStyles.amountLarge,
+                    style: AppTextStyles.amountLarge.copyWith(
+                      color: isDark ? Colors.white : null,
+                    ),
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: '0',
                       hintStyle: AppTextStyles.amountLarge.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withOpacity(0.4),
+                        color: isDark ? Colors.white38 : Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
                       ),
                     ),
                   ),
@@ -225,6 +245,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   }
 
   Widget _buildBottomBar() {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return Positioned(
       bottom: 32,
       left: 32,
@@ -241,8 +262,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Text(
                 'Back',
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color:
-                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  color: isDark ? Colors.white70 : Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
             )
@@ -252,8 +272,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             controller: _pageController,
             count: 3,
             effect: WormEffect(
-              dotColor:
-                  Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+              dotColor: isDark
+                  ? Colors.white30
+                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
               activeDotColor: Theme.of(context).colorScheme.primary,
               dotHeight: 8,
               dotWidth: 8,

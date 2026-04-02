@@ -22,10 +22,10 @@ class AppColors {
 
   // Dark mode counterparts
   static const darkPrimary = Color(0xFF4CAF50);
-  static const darkNeutralBg = Color(0xFF0F1117);
+  static const darkNeutralBg = Color(0xFF121318);
   static const darkSurface = Color(0xFF1A1D23);
-  static const darkTextPrimary = Color(0xFFF7F8FA);
-  static const darkTextSecondary = Color(0xFF9CA3AF);
+  static const darkTextPrimary = Color(0xFFFFFFFF);
+  static const darkTextSecondary = Color(0xFFB0B0B0);
 
   // Category colors (defined here for consistency)
   static const food = Color(0xFFFF6B6B);
