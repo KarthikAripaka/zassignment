@@ -36,32 +36,44 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
   final Box<Goal>? _box;
   final SettingsNotifier _settingsNotifier;
   static const _uuid = Uuid();
-  
-  final Map<String, int> _contributionStreaks = {};
-  final Map<String, DateTime> _lastContributionDates = {};
 
-  int getContributionStreak(String goalId) => _contributionStreaks[goalId] ?? 0;
-  DateTime? getLastContributionDate(String goalId) => _lastContributionDates[goalId];
+  int getContributionStreak(String goalId) {
+    final goal = state.firstWhere((g) => g.id == goalId, orElse: () => state.first);
+    return goal.contributionStreak;
+  }
 
-  void _updateContributionStreak(String goalId) {
+  void _updateContributionStreak(Goal goal) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    final lastDate = _lastContributionDates[goalId];
+    final lastDate = goal.lastContribution;
     
+    int newStreak = 1;
     if (lastDate != null) {
       final lastDay = DateTime(lastDate.year, lastDate.month, lastDate.day);
       final diff = today.difference(lastDay).inDays;
       
       if (diff == 1) {
-        _contributionStreaks[goalId] = (_contributionStreaks[goalId] ?? 0) + 1;
-      } else if (diff > 1) {
-        _contributionStreaks[goalId] = 1;
+        newStreak = goal.contributionStreak + 1;
+      } else if (diff == 0) {
+        newStreak = goal.contributionStreak;
       }
-    } else {
-      _contributionStreaks[goalId] = 1;
     }
     
-    _lastContributionDates[goalId] = now;
+    final updated = goal.copyWith(
+      contributionStreak: newStreak,
+      lastContribution: now,
+    );
+    
+    _updateGoalInBox(updated);
+  }
+
+  Future<void> _updateGoalInBox(Goal goal) async {
+    if (_box == null) return;
+    final index = _box.values.toList().indexWhere((g) => g.id == goal.id);
+    if (index != -1) {
+      await _box.putAt(index, goal);
+      _load();
+    }
   }
 
   void _load() {
@@ -174,7 +186,7 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
     await update(updated);
 
     // Update contribution streak
-    _updateContributionStreak(goalId);
+    _updateContributionStreak(goal);
 
     await DatabaseService().logAudit(
       action: AuditAction.update,

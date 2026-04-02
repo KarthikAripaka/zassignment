@@ -22,6 +22,8 @@ class Goal with _$Goal {
     @HiveField(7) DateTime? lastCheckIn,
     @HiveField(8) @Default(false) bool isCompleted,
     @HiveField(9) required DateTime createdAt,
+    @HiveField(10) @Default(0) int contributionStreak,
+    @HiveField(11) DateTime? lastContribution,
   }) = _Goal;
 
   factory Goal.fromJson(Map<String, dynamic> json) => _$GoalFromJson(json);
@@ -31,6 +33,14 @@ class Goal with _$Goal {
   bool get isActive => !isCompleted && (deadline == null || deadline!.isAfter(DateTime.now()));
 
   String get progressText => '${(progress * 100).toStringAsFixed(0)}%';
+
+  bool get contributedToday {
+    if (lastContribution == null) return false;
+    final now = DateTime.now();
+    return lastContribution!.year == now.year && 
+           lastContribution!.month == now.month && 
+           lastContribution!.day == now.day;
+  }
 
   @override
   String toString() => 'Goal(title: $title, progress: $progress)';

@@ -20,20 +20,22 @@ class GoalAdapter extends TypeAdapter<Goal> {
       id: fields[0] as String,
       title: fields[1] as String,
       targetAmount: fields[2] as double,
-      currentAmount: fields[3] as double,
+      currentAmount: fields[3] as double? ?? 0.0,
       deadline: fields[4] as DateTime?,
       type: fields[5] as GoalType,
-      streakDays: fields[6] as int,
+      streakDays: fields[6] as int? ?? 0,
       lastCheckIn: fields[7] as DateTime?,
-      isCompleted: fields[8] as bool,
+      isCompleted: fields[8] as bool? ?? false,
       createdAt: fields[9] as DateTime,
+      contributionStreak: fields[10] as int? ?? 0,
+      lastContribution: fields[11] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, Goal obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -53,7 +55,11 @@ class GoalAdapter extends TypeAdapter<Goal> {
       ..writeByte(8)
       ..write(obj.isCompleted)
       ..writeByte(9)
-      ..write(obj.createdAt);
+      ..write(obj.createdAt)
+      ..writeByte(10)
+      ..write(obj.contributionStreak)
+      ..writeByte(11)
+      ..write(obj.lastContribution);
   }
 
   @override

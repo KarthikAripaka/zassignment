@@ -40,6 +40,10 @@ mixin _$Goal {
   bool get isCompleted => throw _privateConstructorUsedError;
   @HiveField(9)
   DateTime get createdAt => throw _privateConstructorUsedError;
+  @HiveField(10)
+  int get contributionStreak => throw _privateConstructorUsedError;
+  @HiveField(11)
+  DateTime? get lastContribution => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -61,7 +65,9 @@ abstract class $GoalCopyWith<$Res> {
       @HiveField(6) int streakDays,
       @HiveField(7) DateTime? lastCheckIn,
       @HiveField(8) bool isCompleted,
-      @HiveField(9) DateTime createdAt});
+      @HiveField(9) DateTime createdAt,
+      @HiveField(10) int contributionStreak,
+      @HiveField(11) DateTime? lastContribution});
 }
 
 /// @nodoc
@@ -232,7 +238,9 @@ class _$GoalImpl extends _Goal {
       @HiveField(6) this.streakDays = 0,
       @HiveField(7) this.lastCheckIn,
       @HiveField(8) this.isCompleted = false,
-      @HiveField(9) required this.createdAt})
+      @HiveField(9) required this.createdAt,
+      @HiveField(10) this.contributionStreak = 0,
+      @HiveField(11) this.lastContribution})
       : super._();
 
   factory _$GoalImpl.fromJson(Map<String, dynamic> json) =>
@@ -271,6 +279,12 @@ class _$GoalImpl extends _Goal {
   @override
   @HiveField(9)
   final DateTime createdAt;
+  @override
+  @HiveField(10)
+  final int contributionStreak;
+  @override
+  @HiveField(11)
+  final DateTime? lastContribution;
 
   @override
   bool operator ==(Object other) {
@@ -293,7 +307,11 @@ class _$GoalImpl extends _Goal {
             (identical(other.isCompleted, isCompleted) ||
                 other.isCompleted == isCompleted) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.contributionStreak, contributionStreak) ||
+                other.contributionStreak == contributionStreak) &&
+            (identical(other.lastContribution, lastContribution) ||
+                other.lastContribution == lastContribution));
   }
 
   @JsonKey(ignore: true)
@@ -309,7 +327,9 @@ class _$GoalImpl extends _Goal {
       streakDays,
       lastCheckIn,
       isCompleted,
-      createdAt);
+      createdAt,
+      contributionStreak,
+      lastContribution);
 
   @JsonKey(ignore: true)
   @override
@@ -336,7 +356,9 @@ abstract class _Goal extends Goal {
       @HiveField(6) final int streakDays,
       @HiveField(7) final DateTime? lastCheckIn,
       @HiveField(8) final bool isCompleted,
-      @HiveField(9) required final DateTime createdAt}) = _$GoalImpl;
+      @HiveField(9) required final DateTime createdAt,
+      @HiveField(10) final int contributionStreak,
+      @HiveField(11) final DateTime? lastContribution}) = _$GoalImpl;
   _Goal._() : super._();
 
   factory _Goal.fromJson(Map<String, dynamic> json) = _$GoalImpl.fromJson;
@@ -371,6 +393,12 @@ abstract class _Goal extends Goal {
   @override
   @HiveField(9)
   DateTime get createdAt;
+  @override
+  @HiveField(10)
+  int get contributionStreak;
+  @override
+  @HiveField(11)
+  DateTime? get lastContribution;
   @override
   @JsonKey(ignore: true)
   _$$GoalImplCopyWith<_$GoalImpl> get copyWith =>
