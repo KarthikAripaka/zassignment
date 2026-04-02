@@ -262,6 +262,31 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
         );
 
     HapticFeedback.lightImpact();
-    Navigator.pop(context);
+
+    // Show success dialog
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: AppColors.success, size: 28),
+            const SizedBox(width: 12),
+            Text(
+              'Goal created!',
+              style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // Auto close dialog after 1.5 seconds and go back
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted && context.mounted) {
+        Navigator.of(context).pop(); // Close dialog
+        Navigator.of(context).pop(); // Go back to goals screen
+      }
+    });
   }
 }

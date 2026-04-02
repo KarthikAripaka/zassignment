@@ -412,7 +412,40 @@ class _AddEditTransactionScreenState
     }
 
     HapticFeedback.lightImpact();
-    Navigator.pop(context);
+
+    // Show success dialog and clear form
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        content: Row(
+          children: [
+            const Icon(Icons.check_circle, color: AppColors.success, size: 28),
+            const SizedBox(width: 12),
+            Text(
+              _isEditing ? 'Transaction updated!' : 'Transaction added!',
+              style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w500),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // Auto close dialog after 1.5 seconds and clear form
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        Navigator.of(context).pop(); // Close dialog
+        // Clear form for next entry
+        _amountController.clear();
+        _titleController.clear();
+        _notesController.clear();
+        setState(() {
+          _type = TransactionType.expense;
+          _selectedCategory = Category.food;
+          _selectedDate = DateTime.now();
+        });
+      }
+    });
   }
 }
 

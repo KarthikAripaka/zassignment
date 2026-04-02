@@ -221,9 +221,11 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
   void _deleteTransaction(Transaction transaction) {
     ref.read(transactionsProvider.notifier).delete(transaction.id);
 
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('${transaction.title} deleted'),
+        duration: const Duration(seconds: 3),
         action: SnackBarAction(
           label: 'Undo',
           onPressed: () {
