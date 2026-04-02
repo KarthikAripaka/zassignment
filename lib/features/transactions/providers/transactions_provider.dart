@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:uuid/uuid.dart';
 import '../../../data/models/transaction.dart';
 import '../../../data/adapters/transaction_adapter.dart' as adapter;
+import '../../../core/providers/settings_provider.dart';
 
 final transactionsBoxProvider = FutureProvider<Box<Transaction>>((ref) async {
   if (!Hive.isAdapterRegistered(0)) {
@@ -15,21 +16,22 @@ final transactionsBoxProvider = FutureProvider<Box<Transaction>>((ref) async {
 final transactionsProvider =
     StateNotifierProvider<TransactionsNotifier, List<Transaction>>((ref) {
   final box = ref.watch(transactionsBoxProvider);
-  return TransactionsNotifier(box.value);
+  final settingsNotifier = ref.watch(settingsProvider.notifier);
+  return TransactionsNotifier(box.value, settingsNotifier);
 });
 
 class TransactionsNotifier extends StateNotifier<List<Transaction>> {
-  TransactionsNotifier(this._box) : super([]) {
+  TransactionsNotifier(this._box, this._settingsNotifier) : super([]) {
     _load();
   }
 
   final Box<Transaction>? _box;
+  final SettingsNotifier _settingsNotifier;
   static const _uuid = Uuid();
 
   void _load() {
     if (_box == null) return;
-    state = _box!.values.toList()
-      ..sort((a, b) => b.date.compareTo(a.date));
+    state = _box.values.toList()..sort((a, b) => b.date.compareTo(a.date));
   }
 
   Future<void> add({
@@ -51,28 +53,56 @@ class TransactionsNotifier extends StateNotifier<List<Transaction>> {
       date: date,
       createdAt: DateTime.now(),
     );
-    await _box!.add(transaction);
+    await _box.add(transaction);
     _load();
+
+    if (type == TransactionType.income) {
+      await _settingsNotifier.addToBalance(amount);
+    } else {
+      await _settingsNotifier.subtractFromBalance(amount);
+    }
   }
 
-  Future<void> update(Transaction transaction) async {
+  Future<void> update(Transaction oldTransaction, Transaction newTransaction) async {
     if (_box == null) return;
-    await _box!.put(transaction.id, transaction);
-    _load();
+    final index = _box.values.toList().indexWhere((t) => t.id == oldTransaction.id);
+    if (index != -1) {
+      await _box.putAt(index, newTransaction);
+      _load();
+
+      if (oldTransaction.type == TransactionType.income) {
+        await _settingsNotifier.subtractFromBalance(oldTransaction.amount);
+      } else {
+        await _settingsNotifier.addToBalance(oldTransaction.amount);
+      }
+
+      if (newTransaction.type == TransactionType.income) {
+        await _settingsNotifier.addToBalance(newTransaction.amount);
+      } else {
+        await _settingsNotifier.subtractFromBalance(newTransaction.amount);
+      }
+    }
   }
 
   Future<void> delete(String id) async {
     if (_box == null) return;
-    final index = _box!.values.toList().indexWhere((t) => t.id == id);
+    final index = _box.values.toList().indexWhere((t) => t.id == id);
     if (index != -1) {
-      await _box!.deleteAt(index);
+      final transaction = _box.values.toList()[index];
+      await _box.deleteAt(index);
       _load();
+
+      if (transaction.type == TransactionType.income) {
+        await _settingsNotifier.subtractFromBalance(transaction.amount);
+      } else {
+        await _settingsNotifier.addToBalance(transaction.amount);
+      }
     }
   }
 
   Future<void> clearAll() async {
     if (_box == null) return;
-    await _box!.clear();
+    await _box.clear();
     _load();
   }
 }
@@ -145,14 +175,12 @@ final filteredTransactionsProvider =
             .toList();
       }
       if (filter.dateFrom != null) {
-        filtered = filtered
-            .where((t) => t.date.isAfter(filter.dateFrom!))
-            .toList();
+        filtered =
+            filtered.where((t) => t.date.isAfter(filter.dateFrom!)).toList();
       }
       if (filter.dateTo != null) {
-        filtered = filtered
-            .where((t) => t.date.isBefore(filter.dateTo!))
-            .toList();
+        filtered =
+            filtered.where((t) => t.date.isBefore(filter.dateTo!)).toList();
       }
 
       return AsyncValue.data(filtered);

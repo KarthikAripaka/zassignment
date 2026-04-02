@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_text_styles.dart';
+import '../../core/providers/settings_provider.dart';
 import '../../data/models/transaction.dart';
 import '../../data/models/category.dart';
 import 'providers/transactions_provider.dart';
@@ -149,7 +150,8 @@ class _AddEditTransactionScreenState
                     icon: Icons.arrow_upward,
                     isSelected: _type == TransactionType.expense,
                     color: AppColors.danger,
-                    onTap: () => setState(() => _type = TransactionType.expense),
+                    onTap: () =>
+                        setState(() => _type = TransactionType.expense),
                   ),
                 ),
                 const Gap(12),
@@ -167,7 +169,7 @@ class _AddEditTransactionScreenState
             const Gap(24),
 
             // Category selector
-            Text('Category', style: AppTextStyles.headlineSmall),
+            const Text('Category', style: AppTextStyles.headlineSmall),
             const Gap(12),
             SizedBox(
               height: 90,
@@ -184,8 +186,7 @@ class _AddEditTransactionScreenState
                       setState(() {
                         _selectedCategory = cat;
                         if (_titleController.text.isEmpty ||
-                            _titleController.text ==
-                                _selectedCategory.label) {
+                            _titleController.text == _selectedCategory.label) {
                           _titleController.text = cat.label;
                         }
                       });
@@ -226,8 +227,7 @@ class _AddEditTransactionScreenState
                             cat.label,
                             style: AppTextStyles.bodySmall.copyWith(
                               color: isSelected ? cat.color : null,
-                              fontWeight:
-                                  isSelected ? FontWeight.w600 : null,
+                              fontWeight: isSelected ? FontWeight.w600 : null,
                               fontSize: 10,
                             ),
                             maxLines: 1,
@@ -357,6 +357,33 @@ class _AddEditTransactionScreenState
       return;
     }
 
+    // Check balance for expense transactions
+    if (_type == TransactionType.expense) {
+      final settings = ref.read(settingsProvider);
+      double availableBalance = settings.balance;
+      if (_isEditing && widget.transaction!.type == TransactionType.expense) {
+        availableBalance += widget.transaction!.amount;
+      }
+      if (amount > availableBalance) {
+        showDialog<void>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Insufficient Balance'),
+            content: Text(
+              'You need \u20B9${amount.toStringAsFixed(0)} but your current balance is \u20B9${availableBalance.toStringAsFixed(0)}. Please add income first.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+    }
+
     final notifier = ref.read(transactionsProvider.notifier);
 
     if (_isEditing) {
@@ -370,7 +397,7 @@ class _AddEditTransactionScreenState
             : _notesController.text.trim(),
         date: _selectedDate,
       );
-      notifier.update(updated);
+      notifier.update(widget.transaction!, updated);
     } else {
       notifier.add(
         amount: amount,

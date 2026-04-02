@@ -37,7 +37,7 @@ class InsightsScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(16),
-                  Text(
+                  const Text(
                     'Insights',
                     style: AppTextStyles.headlineLarge,
                   ).animate().fadeIn(duration: 400.ms),
@@ -96,7 +96,7 @@ class InsightsScreen extends ConsumerWidget {
 
                   // Category breakdown
                   if (insightsData.categoryBreakdowns.isNotEmpty) ...[
-                    Text(
+                    const Text(
                       'Spending by Category',
                       style: AppTextStyles.headlineSmall,
                     ),
@@ -112,7 +112,7 @@ class InsightsScreen extends ConsumerWidget {
                       insightsData.weeklyComparison.any(
                         (w) => w.income > 0 || w.expenses > 0,
                       )) ...[
-                    Text(
+                    const Text(
                       'Income vs Expenses',
                       style: AppTextStyles.headlineSmall,
                     ),
@@ -125,7 +125,7 @@ class InsightsScreen extends ConsumerWidget {
 
                   // Smart insights
                   if (insightsData.insights.isNotEmpty) ...[
-                    Text(
+                    const Text(
                       'Smart Insights',
                       style: AppTextStyles.headlineSmall,
                     ),
@@ -140,7 +140,7 @@ class InsightsScreen extends ConsumerWidget {
 
                   // Top transactions
                   if (insightsData.topTransactions.isNotEmpty) ...[
-                    Text(
+                    const Text(
                       'Top Transactions',
                       style: AppTextStyles.headlineSmall,
                     ),
@@ -405,9 +405,8 @@ class _InsightCard extends StatelessWidget {
             child: Text(
               insight.text,
               style: AppTextStyles.bodyMedium.copyWith(
-                color: isDark
-                    ? AppColors.darkTextPrimary
-                    : AppColors.textPrimary,
+                color:
+                    isDark ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
           ),

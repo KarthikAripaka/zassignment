@@ -129,28 +129,28 @@ class DashboardShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
+    return const Padding(
+      padding: EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const LoadingShimmer(width: 200, height: 20),
-          const SizedBox(height: 24),
-          const LoadingShimmer(
+          LoadingShimmer(width: 200, height: 20),
+          SizedBox(height: 24),
+          LoadingShimmer(
             width: double.infinity,
             height: 140,
             borderRadius: 16,
           ),
-          const SizedBox(height: 24),
-          const LoadingShimmer(
+          SizedBox(height: 24),
+          LoadingShimmer(
             width: double.infinity,
             height: 200,
             borderRadius: 16,
           ),
-          const SizedBox(height: 24),
-          const LoadingShimmer(width: 120, height: 18),
-          const SizedBox(height: 16),
-          const LoadingShimmer(
+          SizedBox(height: 24),
+          LoadingShimmer(width: 120, height: 18),
+          SizedBox(height: 16),
+          LoadingShimmer(
             width: double.infinity,
             height: 72,
             borderRadius: 12,

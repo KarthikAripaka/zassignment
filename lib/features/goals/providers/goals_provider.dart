@@ -12,8 +12,7 @@ final goalsBoxProvider = FutureProvider<Box<Goal>>((ref) async {
   return Hive.openBox<Goal>('goals');
 });
 
-final goalsProvider =
-    StateNotifierProvider<GoalsNotifier, List<Goal>>((ref) {
+final goalsProvider = StateNotifierProvider<GoalsNotifier, List<Goal>>((ref) {
   final box = ref.watch(goalsBoxProvider);
   return GoalsNotifier(box.value);
 });
@@ -28,7 +27,7 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
 
   void _load() {
     if (_box == null) return;
-    state = _box!.values.toList()
+    state = _box.values.toList()
       ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
@@ -49,25 +48,25 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
       deadline: deadline,
       createdAt: DateTime.now(),
     );
-    await _box!.add(goal);
+    await _box.add(goal);
     _load();
     return goal;
   }
 
   Future<void> update(Goal goal) async {
     if (_box == null) return;
-    final index = _box!.values.toList().indexWhere((g) => g.id == goal.id);
+    final index = _box.values.toList().indexWhere((g) => g.id == goal.id);
     if (index != -1) {
-      await _box!.putAt(index, goal);
+      await _box.putAt(index, goal);
       _load();
     }
   }
 
   Future<void> delete(String id) async {
     if (_box == null) return;
-    final index = _box!.values.toList().indexWhere((g) => g.id == id);
+    final index = _box.values.toList().indexWhere((g) => g.id == id);
     if (index != -1) {
-      await _box!.deleteAt(index);
+      await _box.deleteAt(index);
       _load();
     }
   }
@@ -95,8 +94,8 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
 
     if (lastCheck == today) return;
 
-    final isConsecutive = lastCheck == null ||
-        today.difference(lastCheck).inDays == 1;
+    final isConsecutive =
+        lastCheck == null || today.difference(lastCheck).inDays == 1;
 
     final updated = goal.copyWith(
       streakDays: isConsecutive ? goal.streakDays + 1 : 1,
@@ -110,15 +109,13 @@ class GoalsNotifier extends StateNotifier<List<Goal>> {
     await update(goal.copyWith(isCompleted: true));
   }
 
-  List<Goal> get activeGoals =>
-      state.where((g) => !g.isCompleted).toList();
+  List<Goal> get activeGoals => state.where((g) => !g.isCompleted).toList();
 
-  List<Goal> get completedGoals =>
-      state.where((g) => g.isCompleted).toList();
+  List<Goal> get completedGoals => state.where((g) => g.isCompleted).toList();
 
   Future<void> clearAll() async {
     if (_box == null) return;
-    await _box!.clear();
+    await _box.clear();
     _load();
   }
 }

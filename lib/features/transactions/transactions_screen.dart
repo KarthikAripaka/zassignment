@@ -18,8 +18,7 @@ class TransactionsScreen extends ConsumerStatefulWidget {
   const TransactionsScreen({super.key});
 
   @override
-  ConsumerState<TransactionsScreen> createState() =>
-      _TransactionsScreenState();
+  ConsumerState<TransactionsScreen> createState() => _TransactionsScreenState();
 }
 
 class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
@@ -54,7 +53,7 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             'Transactions',
                             style: AppTextStyles.headlineLarge,
                           ),
@@ -71,12 +70,12 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                                             transactionFilterProvider.notifier,
                                           )
                                           .state = ref
-                                              .read(
-                                                transactionFilterProvider,
-                                              )
-                                              .copyWith(
-                                                searchQuery: '',
-                                              );
+                                          .read(
+                                            transactionFilterProvider,
+                                          )
+                                          .copyWith(
+                                            searchQuery: '',
+                                          );
                                     }
                                   });
                                 },
@@ -94,19 +93,18 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                         TextField(
                           controller: _searchController,
                           autofocus: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Search transactions...',
-                            prefixIcon: const Icon(Icons.search, size: 20),
+                            prefixIcon: Icon(Icons.search, size: 20),
                             isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(
+                            contentPadding: EdgeInsets.symmetric(
                               horizontal: 16,
                               vertical: 12,
                             ),
                           ),
                           onChanged: (value) {
-                            ref
-                                .read(transactionFilterProvider.notifier)
-                                .state = ref
+                            ref.read(transactionFilterProvider.notifier).state =
+                                ref
                                     .read(transactionFilterProvider)
                                     .copyWith(searchQuery: value);
                           },
@@ -130,19 +128,14 @@ class _TransactionsScreenState extends ConsumerState<TransactionsScreen> {
                         return EmptyState(
                           icon: Icons.receipt_long_outlined,
                           title: 'No transactions',
-                          subtitle: ref
-                                  .read(transactionFilterProvider)
-                                  .isEmpty
+                          subtitle: ref.read(transactionFilterProvider).isEmpty
                               ? 'Start tracking your finances by adding your first transaction'
                               : 'No transactions match your current filters',
-                          actionLabel: ref
-                                  .read(transactionFilterProvider)
-                                  .isEmpty
-                              ? 'Add Transaction'
-                              : null,
-                          onAction: ref
-                                  .read(transactionFilterProvider)
-                                  .isEmpty
+                          actionLabel:
+                              ref.read(transactionFilterProvider).isEmpty
+                                  ? 'Add Transaction'
+                                  : null,
+                          onAction: ref.read(transactionFilterProvider).isEmpty
                               ? () => _openAddTransaction(context)
                               : null,
                         );
@@ -271,11 +264,9 @@ class _FilterChipsRow extends ConsumerWidget {
             label: 'Income',
             isSelected: filter.type == TransactionType.income,
             onTap: () {
-              final notifier =
-                  ref.read(transactionFilterProvider.notifier);
+              final notifier = ref.read(transactionFilterProvider.notifier);
               if (filter.type == TransactionType.income) {
-                notifier.state =
-                    filter.copyWith(type: () => null);
+                notifier.state = filter.copyWith(type: () => null);
               } else {
                 notifier.state =
                     filter.copyWith(type: () => TransactionType.income);
@@ -287,11 +278,9 @@ class _FilterChipsRow extends ConsumerWidget {
             label: 'Expenses',
             isSelected: filter.type == TransactionType.expense,
             onTap: () {
-              final notifier =
-                  ref.read(transactionFilterProvider.notifier);
+              final notifier = ref.read(transactionFilterProvider.notifier);
               if (filter.type == TransactionType.expense) {
-                notifier.state =
-                    filter.copyWith(type: () => null);
+                notifier.state = filter.copyWith(type: () => null);
               } else {
                 notifier.state =
                     filter.copyWith(type: () => TransactionType.expense);
@@ -307,10 +296,8 @@ class _FilterChipsRow extends ConsumerWidget {
                 ),
             onTap: () {
               final now = DateTime.now();
-              final startOfWeek =
-                  now.subtract(Duration(days: now.weekday - 1));
-              final notifier =
-                  ref.read(transactionFilterProvider.notifier);
+              final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+              final notifier = ref.read(transactionFilterProvider.notifier);
               notifier.state = filter.copyWith(
                 dateFrom: () => DateTime(
                   startOfWeek.year,
@@ -327,8 +314,7 @@ class _FilterChipsRow extends ConsumerWidget {
                 filter.dateFrom!.month == DateTime.now().month,
             onTap: () {
               final now = DateTime.now();
-              final notifier =
-                  ref.read(transactionFilterProvider.notifier);
+              final notifier = ref.read(transactionFilterProvider.notifier);
               notifier.state = filter.copyWith(
                 dateFrom: () => DateTime(now.year, now.month, 1),
               );
@@ -375,9 +361,7 @@ class _FilterChip extends StatelessWidget {
           style: AppTextStyles.bodySmall.copyWith(
             color: isSelected
                 ? Colors.white
-                : (isDark
-                    ? AppColors.darkTextPrimary
-                    : AppColors.textPrimary),
+                : (isDark ? AppColors.darkTextPrimary : AppColors.textPrimary),
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
           ),
         ),

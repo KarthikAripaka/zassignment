@@ -28,7 +28,7 @@ class ErrorState extends StatelessWidget {
               color: AppColors.danger,
             ),
             const Gap(16),
-            Text(
+            const Text(
               'Oops!',
               style: AppTextStyles.headlineMedium,
             ),

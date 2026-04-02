@@ -68,7 +68,7 @@ class AppTheme {
       landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
     ),
     textTheme: _textTheme(Brightness.light),
-    navigationBarTheme: NavigationBarThemeData(
+    navigationBarTheme: const NavigationBarThemeData(
       backgroundColor: AppColors.surface,
       indicatorColor: AppColors.primaryLight,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -138,7 +138,7 @@ class AppTheme {
       landscapeLayout: BottomNavigationBarLandscapeLayout.centered,
     ),
     textTheme: _textTheme(Brightness.dark),
-    navigationBarTheme: NavigationBarThemeData(
+    navigationBarTheme: const NavigationBarThemeData(
       backgroundColor: AppColors.darkSurface,
       indicatorColor: AppColors.darkPrimary,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
@@ -150,11 +150,11 @@ class AppTheme {
             ? Typography.material2021().black
             : Typography.material2021().white)
         .apply(
-          bodyColor:
-              brightness == Brightness.light ? null : AppColors.darkTextPrimary,
-          displayColor:
-              brightness == Brightness.light ? null : AppColors.darkTextPrimary,
-        );
+      bodyColor:
+          brightness == Brightness.light ? null : AppColors.darkTextPrimary,
+      displayColor:
+          brightness == Brightness.light ? null : AppColors.darkTextPrimary,
+    );
 
     return base
         .copyWith(

@@ -10,6 +10,7 @@ import '../../core/widgets/empty_state.dart';
 import '../../core/widgets/loading_shimmer.dart';
 import '../../core/providers/settings_provider.dart';
 import '../transactions/providers/transactions_provider.dart';
+import '../transactions/add_edit_transaction_screen.dart';
 import 'providers/dashboard_provider.dart';
 import 'widgets/balance_card.dart';
 import 'widgets/spending_chart.dart';
@@ -47,7 +48,7 @@ class DashboardScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(16),
-                  
+
                   // Header: Greeting + Theme Toggle
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,32 +81,36 @@ class DashboardScreen extends ConsumerWidget {
                       ),
                     ],
                   ).animate().fadeIn(duration: 400.ms),
-                  
+
                   const Gap(20),
-                  
+
                   // Total Balance + Income/Expense Card
                   BalanceCard(
                     totalBalance: dashboardData.totalBalance,
                     monthIncome: dashboardData.monthIncome,
                     monthExpenses: dashboardData.monthExpenses,
-                  ).animate().fadeIn(delay: 100.ms, duration: 400.ms).slideY(begin: 0.1),
-                  
+                  )
+                      .animate()
+                      .fadeIn(delay: 100.ms, duration: 400.ms)
+                      .slideY(begin: 0.1),
+
                   const Gap(16),
-                  
+
                   // Smart Insight
-                  if (dashboardData.monthIncome > 0 || dashboardData.recentTransactions.isNotEmpty)
+                  if (dashboardData.monthIncome > 0 ||
+                      dashboardData.recentTransactions.isNotEmpty)
                     SmartInsight(data: dashboardData)
                         .animate()
                         .fadeIn(delay: 150.ms, duration: 400.ms),
-                  
+
                   const Gap(20),
-                  
+
                   // Weekly Spending Chart
                   if (dashboardData.last7Days.any((d) => d.amount > 0)) ...[
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'This Week',
                           style: AppTextStyles.headlineSmall,
                         ),
@@ -124,20 +129,20 @@ class DashboardScreen extends ConsumerWidget {
                         .fadeIn(delay: 200.ms, duration: 400.ms),
                     const Gap(20),
                   ],
-                  
+
                   // Summary Chips (Savings Rate + Top Category)
                   _buildSummaryChips(context, dashboardData),
-                  
+
                   // Recent Transactions
                   RecentTransactionsList(
                     transactions: dashboardData.recentTransactions,
                   ).animate().fadeIn(delay: 300.ms, duration: 400.ms),
-                  
+
                   const Gap(20),
-                  
+
                   // Active Goals Preview
                   if (dashboardData.activeGoals.isNotEmpty) ...[
-                    Text(
+                    const Text(
                       'Active Goals',
                       style: AppTextStyles.headlineSmall,
                     ),
@@ -147,7 +152,7 @@ class DashboardScreen extends ConsumerWidget {
                         .fadeIn(delay: 400.ms, duration: 400.ms),
                     const Gap(24),
                   ],
-                  
+
                   // Empty State
                   if (dashboardData.recentTransactions.isEmpty)
                     EmptyState(
@@ -157,10 +162,14 @@ class DashboardScreen extends ConsumerWidget {
                           'Add your first transaction to see your financial overview',
                       actionLabel: 'Add Transaction',
                       onAction: () {
-                        // TODO: Navigate to add transaction
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const AddEditTransactionScreen(),
+                          ),
+                        );
                       },
                     ),
-                  
+
                   const Gap(32),
                 ],
               ),
@@ -193,20 +202,24 @@ class DashboardScreen extends ConsumerWidget {
                 Icon(
                   data.savingsRate >= 20 ? Icons.savings : Icons.trending_down,
                   size: 16,
-                  color: data.savingsRate >= 20 ? AppColors.success : AppColors.accent,
+                  color: data.savingsRate >= 20
+                      ? AppColors.success
+                      : AppColors.accent,
                 ),
                 const Gap(6),
                 Text(
                   '${data.savingsRate.toStringAsFixed(0)}% saved',
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: data.savingsRate >= 20 ? AppColors.success : AppColors.accent,
+                    color: data.savingsRate >= 20
+                        ? AppColors.success
+                        : AppColors.accent,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
           ),
-          
+
           // Top Category Chip
           if (data.topCategoryId != null) ...[
             const Gap(12),
@@ -219,7 +232,8 @@ class DashboardScreen extends ConsumerWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.category, size: 16, color: AppColors.primary),
+                  const Icon(Icons.category,
+                      size: 16, color: AppColors.primary),
                   const Gap(6),
                   Text(
                     '${data.topCategoryId![0].toUpperCase()}${data.topCategoryId!.substring(1)}: ${CurrencyFormatter.compact(data.topCategoryAmount)}',
@@ -250,7 +264,9 @@ class DashboardScreen extends ConsumerWidget {
             label: 'System',
             isSelected: currentMode == ThemeMode.system,
             onTap: () {
-              ref.read(settingsProvider.notifier).setThemeMode(ThemeMode.system);
+              ref
+                  .read(settingsProvider.notifier)
+                  .setThemeMode(ThemeMode.system);
               Navigator.pop(ctx);
             },
           ),
@@ -299,18 +315,14 @@ class _ThemeOption extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: isSelected
-                ? Theme.of(context).colorScheme.primary
-                : null,
+            color: isSelected ? Theme.of(context).colorScheme.primary : null,
           ),
           const Gap(12),
           Text(
             label,
             style: TextStyle(
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              color: isSelected
-                  ? Theme.of(context).colorScheme.primary
-                  : null,
+              color: isSelected ? Theme.of(context).colorScheme.primary : null,
             ),
           ),
           const Spacer(),

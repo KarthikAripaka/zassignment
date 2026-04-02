@@ -38,13 +38,12 @@ class GoalsScreen extends ConsumerWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Goals & Challenges',
                           style: AppTextStyles.headlineLarge,
                         ),
                         IconButton(
-                          onPressed: () =>
-                              _openAddGoal(context),
+                          onPressed: () => _openAddGoal(context),
                           icon: const Icon(Icons.add_circle_outline),
                           tooltip: 'Add goal',
                         ),
@@ -65,9 +64,9 @@ class GoalsScreen extends ConsumerWidget {
                   )
                 else ...[
                   if (activeGoals.isNotEmpty) ...[
-                    SliverToBoxAdapter(
+                    const SliverToBoxAdapter(
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 24, 20, 12),
+                        padding: EdgeInsets.fromLTRB(20, 24, 20, 12),
                         child: Text(
                           'Active',
                           style: AppTextStyles.headlineSmall,
@@ -87,8 +86,7 @@ class GoalsScreen extends ConsumerWidget {
                                 onAddMoney: () =>
                                     _showAddMoneyDialog(context, ref, goal),
                                 onComplete: () => _completeGoal(ref, goal),
-                                onCheckIn: () =>
-                                    _checkInStreak(ref, goal),
+                                onCheckIn: () => _checkInStreak(ref, goal),
                               ).animate().fadeIn(
                                     delay: Duration(milliseconds: 100 * index),
                                     duration: 400.ms,

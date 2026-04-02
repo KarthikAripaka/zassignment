@@ -46,7 +46,7 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Goal type selector
-            Text('Goal Type', style: AppTextStyles.headlineSmall),
+            const Text('Goal Type', style: AppTextStyles.headlineSmall),
             const Gap(12),
             ...GoalType.values.map((type) {
               final isSelected = type == _selectedType;
@@ -59,7 +59,9 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
                     decoration: BoxDecoration(
                       color: isSelected
                           ? AppColors.primary.withOpacity(0.08)
-                          : (isDark ? AppColors.darkSurface : AppColors.surface),
+                          : (isDark
+                              ? AppColors.darkSurface
+                              : AppColors.surface),
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
                         color: isSelected
@@ -112,7 +114,7 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
             const Gap(24),
 
             // Title
-            Text('Goal Name', style: AppTextStyles.headlineSmall),
+            const Text('Goal Name', style: AppTextStyles.headlineSmall),
             const Gap(12),
             TextField(
               controller: _titleController,
@@ -143,7 +145,8 @@ class _AddEditGoalScreenState extends ConsumerState<AddEditGoalScreen> {
             const Gap(24),
 
             // Deadline (optional)
-            Text('Deadline (optional)', style: AppTextStyles.headlineSmall),
+            const Text('Deadline (optional)',
+                style: AppTextStyles.headlineSmall),
             const Gap(12),
             GestureDetector(
               onTap: _pickDeadline,

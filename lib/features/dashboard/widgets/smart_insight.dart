@@ -89,10 +89,11 @@ class SmartInsight extends StatelessWidget {
 
     // Insight 2: Low savings warning
     if (data.monthIncome > 0 && data.savingsRate < 10) {
+      final expensePercent = ((data.monthExpenses / data.monthIncome) * 100).clamp(0.0, 999.0);
       return _Insight(
         icon: Icons.warning_amber,
         title: 'SPENDING ALERT',
-        message: 'You\'ve spent ${data.monthExpenses.toStringAsFixed(0)}% of income. Consider cutting back.',
+        message: 'You\'ve spent ${expensePercent.toStringAsFixed(0)}% of income. Consider cutting back.',
       );
     }
 

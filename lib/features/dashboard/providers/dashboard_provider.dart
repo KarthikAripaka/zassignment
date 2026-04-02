@@ -3,14 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../data/models/transaction.dart';
 import '../../transactions/providers/transactions_provider.dart';
 import '../../goals/providers/goals_provider.dart';
+import '../../../core/providers/settings_provider.dart';
 
 final dashboardDataProvider = Provider<DashboardData>((ref) {
   final transactions = ref.watch(transactionsProvider);
   final goals = ref.watch(goalsProvider);
+  final settings = ref.watch(settingsProvider);
 
   final now = DateTime.now();
   final startOfMonth = DateTime(now.year, now.month, 1);
-  final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
 
   final monthTransactions =
       transactions.where((t) => t.date.isAfter(startOfMonth)).toList();
@@ -23,9 +24,8 @@ final dashboardDataProvider = Provider<DashboardData>((ref) {
       .where((t) => t.type == TransactionType.expense)
       .fold(0.0, (sum, t) => sum + t.amount);
 
-  final totalBalance = transactions.fold(0.0, (sum, t) {
-    return sum + (t.type == TransactionType.income ? t.amount : -t.amount);
-  });
+  // Use balance from settings which is properly managed
+  final totalBalance = settings.balance;
 
   final savingsRate = monthIncome > 0
       ? ((monthIncome - monthExpenses) / monthIncome * 100).clamp(0.0, 100.0)

@@ -1,5 +1,4 @@
 // ─── lib/core/router/app_router.dart ───
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,7 +12,7 @@ import '../providers/settings_provider.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final settings = ref.watch(settingsProvider);
-  
+
   return GoRouter(
     initialLocation: settings.isOnboardingComplete ? '/' : '/onboarding',
     routes: [

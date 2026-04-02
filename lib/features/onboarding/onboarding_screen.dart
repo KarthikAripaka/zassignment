@@ -4,7 +4,8 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart' hide ScaleEffect;
+import 'package:smooth_page_indicator/smooth_page_indicator.dart'
+    hide ScaleEffect;
 import '../../core/theme/app_text_styles.dart';
 import '../../core/utils/extensions.dart';
 import '../../core/providers/settings_provider.dart';
@@ -55,7 +56,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Animate(
-            effects: [FadeEffect(delay: Duration(milliseconds: 200)), ScaleEffect()],
+            effects: const [
+              FadeEffect(delay: Duration(milliseconds: 200)),
+              ScaleEffect()
+            ],
             child: Icon(
               Icons.trending_up,
               size: 120,
@@ -68,13 +72,17 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             style: AppTextStyles.displayLarge.copyWith(
               color: Theme.of(context).colorScheme.primary,
             ),
-          ).animate().slideY(begin: 0.3, delay: const Duration(milliseconds: 200)),
+          )
+              .animate()
+              .slideY(begin: 0.3, delay: const Duration(milliseconds: 200)),
           const Gap(16),
           const Text(
             'Your Personal Finance Companion',
             style: AppTextStyles.headlineMedium,
             textAlign: TextAlign.center,
-          ).animate().slideY(begin: 0.3, delay: const Duration(milliseconds: 400)),
+          )
+              .animate()
+              .slideY(begin: 0.3, delay: const Duration(milliseconds: 400)),
           const Gap(48),
           const Text(
             'Track spending, set goals, gain insights.\nEverything offline, beautifully designed.',
@@ -116,7 +124,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: Icon(icon, color: Theme.of(context).colorScheme.primary, size: 24),
+          child: Icon(icon,
+              color: Theme.of(context).colorScheme.primary, size: 24),
         ),
         const Gap(16),
         Expanded(
@@ -173,7 +182,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       border: InputBorder.none,
                       hintText: '0',
                       hintStyle: AppTextStyles.amountLarge.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.4),
                       ),
                     ),
                   ),
@@ -204,7 +216,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               child: Text(
                 'Back',
                 style: AppTextStyles.bodyMedium.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
                 ),
               ),
             )
@@ -214,7 +227,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             controller: _pageController,
             count: 3,
             effect: WormEffect(
-              dotColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
+              dotColor:
+                  Theme.of(context).colorScheme.onSurface.withOpacity(0.3),
               activeDotColor: Theme.of(context).colorScheme.primary,
               dotHeight: 8,
               dotWidth: 8,
@@ -246,6 +260,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       // Save onboarding state
       await ref.read(settingsProvider.notifier).completeOnboarding(
             monthlyIncome: income,
+            balance: income,
           );
 
       // Seed sample transactions

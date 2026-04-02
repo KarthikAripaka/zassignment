@@ -18,6 +18,7 @@ class Settings {
     this.themeMode = ThemeMode.system,
     this.currency = 'INR',
     this.monthlyIncome = 0.0,
+    this.balance = 0.0,
     this.isOnboardingComplete = false,
     this.userName = 'Karthik',
   });
@@ -25,6 +26,7 @@ class Settings {
   final ThemeMode themeMode;
   final String currency;
   final double monthlyIncome;
+  final double balance;
   final bool isOnboardingComplete;
   final String userName;
 
@@ -32,6 +34,7 @@ class Settings {
     ThemeMode? themeMode,
     String? currency,
     double? monthlyIncome,
+    double? balance,
     bool? isOnboardingComplete,
     String? userName,
   }) {
@@ -39,6 +42,7 @@ class Settings {
       themeMode: themeMode ?? this.themeMode,
       currency: currency ?? this.currency,
       monthlyIncome: monthlyIncome ?? this.monthlyIncome,
+      balance: balance ?? this.balance,
       isOnboardingComplete:
           isOnboardingComplete ?? this.isOnboardingComplete,
       userName: userName ?? this.userName,
@@ -57,6 +61,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
     final themeIndex = _prefs.getInt('themeMode') ?? 0;
     final currency = _prefs.getString('currency') ?? 'INR';
     final monthlyIncome = _prefs.getDouble('monthlyIncome') ?? 0.0;
+    final balance = _prefs.getDouble('balance') ?? 0.0;
     final isOnboardingComplete = _prefs.getBool('onboardingComplete') ?? false;
     final userName = _prefs.getString('userName') ?? 'Karthik';
 
@@ -64,6 +69,7 @@ class SettingsNotifier extends StateNotifier<Settings> {
       themeMode: ThemeMode.values[themeIndex],
       currency: currency,
       monthlyIncome: monthlyIncome,
+      balance: balance,
       isOnboardingComplete: isOnboardingComplete,
       userName: userName,
     );
@@ -79,16 +85,36 @@ class SettingsNotifier extends StateNotifier<Settings> {
     state = state.copyWith(monthlyIncome: income);
   }
 
+  Future<void> setBalance(double balance) async {
+    await _prefs.setDouble('balance', balance);
+    state = state.copyWith(balance: balance);
+  }
+
+  Future<void> addToBalance(double amount) async {
+    final newBalance = state.balance + amount;
+    await _prefs.setDouble('balance', newBalance);
+    state = state.copyWith(balance: newBalance);
+  }
+
+  Future<void> subtractFromBalance(double amount) async {
+    final newBalance = state.balance - amount;
+    await _prefs.setDouble('balance', newBalance);
+    state = state.copyWith(balance: newBalance);
+  }
+
   Future<void> completeOnboarding({
     required double monthlyIncome,
+    required double balance,
     String userName = 'Karthik',
   }) async {
     await _prefs.setBool('onboardingComplete', true);
     await _prefs.setDouble('monthlyIncome', monthlyIncome);
+    await _prefs.setDouble('balance', balance);
     await _prefs.setString('userName', userName);
     state = state.copyWith(
       isOnboardingComplete: true,
       monthlyIncome: monthlyIncome,
+      balance: balance,
       userName: userName,
     );
   }
