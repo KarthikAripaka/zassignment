@@ -25,8 +25,8 @@ class SeedDataService {
       Transaction(
         id: 'seed_1',
         amount: 5000,
-        type: TransactionType.income,
-        categoryId: 'salary',
+        type: TransactionType.expense,
+        categoryId: 'health',
         title: 'Salary',
         notes: 'Monthly salary',
         date: DateTime.now().subtract(const Duration(days: 2)),
@@ -56,7 +56,7 @@ class SeedDataService {
         id: 'seed_4',
         amount: 2500,
         type: TransactionType.expense,
-        categoryId: 'rent',
+        categoryId: 'food',
         title: 'Rent Payment',
         notes: 'Monthly rent',
         date: DateTime.now().subtract(const Duration(days: 3)),
@@ -81,7 +81,7 @@ class SeedDataService {
 
   static Future<void> _seedGoals(Box<Goal> box) async {
     final now = DateTime.now();
-    
+
     final goals = [
       Goal(
         id: 'seed_goal_1',

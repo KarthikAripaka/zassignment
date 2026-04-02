@@ -13,6 +13,8 @@ enum Category {
   education('Education', Icons.school, AppColors.education),
   travel('Travel', Icons.flight, AppColors.travel),
   income('Income', Icons.account_balance_wallet, AppColors.income),
+  salary('Salary', Icons.work, AppColors.income),
+  rent('Rent', Icons.house, AppColors.housing),
   other('Other', Icons.category, AppColors.other);
 
   const Category(this.label, this.icon, this.color);
